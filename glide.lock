@@ -1,0 +1,12 @@
+hash: 18584b60aa2c2f27f4b2ba527f7daf49839270f3b23ef57da4bb236f43ec448a
+updated: 2018-07-06T10:26:43.091186985+07:00
+imports:
+- name: github.com/codegangsta/cli
+  version: cfb38830724cc34fedffe9a2a29fb54fa9169cd1
+- name: github.com/euclid1990/go-bigquery
+  version: 4a1bd0c06c0635227b1b38ba49f4c6277c1afd81
+  subpackages:
+  - configs
+- name: github.com/joho/godotenv
+  version: a79fa1e548e2c689c241d10173efd51e5d689d5b
+testImports: []
