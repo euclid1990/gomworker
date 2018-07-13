@@ -1,12 +1,26 @@
-hash: 18584b60aa2c2f27f4b2ba527f7daf49839270f3b23ef57da4bb236f43ec448a
-updated: 2018-07-06T10:26:43.091186985+07:00
+hash: 13c2cab07dbfb1a33ce7c436e4571f9e78100f97ba0fef68e2766eb0a59987c4
+updated: 2018-07-09T16:49:14.855099179+07:00
 imports:
 - name: github.com/codegangsta/cli
   version: cfb38830724cc34fedffe9a2a29fb54fa9169cd1
-- name: github.com/euclid1990/go-bigquery
-  version: 4a1bd0c06c0635227b1b38ba49f4c6277c1afd81
-  subpackages:
-  - configs
+- name: github.com/go-sql-driver/mysql
+  version: d523deb1b23d913de5bdada721a6071e71283618
 - name: github.com/joho/godotenv
   version: a79fa1e548e2c689c241d10173efd51e5d689d5b
+- name: github.com/kardianos/osext
+  version: ae77be60afb1dcacde03767a8c37337fad28ac14
+- name: github.com/lann/builder
+  version: 1b87b36280d04fe7882d1512bf038ea2967ad534
+- name: github.com/lann/ps
+  version: 62de8c46ede02a7675c4c79c84883eb164cb71e3
+- name: github.com/mattn/go-sqlite3
+  version: 25ecb14adfc7543176f7d85291ec7dba82c6f7e4
+- name: github.com/sevlyar/go-daemon
+  version: 97491df6ec974d292cb82c61906a1a4c6f29958b
+- name: google.golang.org/appengine
+  version: 9d8544a6b2c7df9cff240fcf92d7b2f59bc13416
+  subpackages:
+  - cloudsql
+- name: gopkg.in/Masterminds/squirrel.v1
+  version: a6b93000bd219143c56c16e6cb1c4b91da3f224b
 testImports: []

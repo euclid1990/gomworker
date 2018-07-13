@@ -3,13 +3,19 @@ package main
 import (
 	"github.com/codegangsta/cli"
 	"github.com/euclid1990/gomworker/cmd"
-	"github.com/euclid1990/gomworker/utilities"
+	cf "github.com/euclid1990/gomworker/configs"
+	util "github.com/euclid1990/gomworker/utilities"
 	"os"
 )
 
-func main() {
+func init() {
 	// Read env vars from .env file
-	utilities.LoadEnv("")
+	util.LoadEnv("")
+	// Init variable from
+	cf.Database()
+}
+
+func main() {
 	// Create cli application
 	app := cli.NewApp()
 	app.Name = "Gomworker"
