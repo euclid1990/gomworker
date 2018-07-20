@@ -1,8 +1,10 @@
-hash: 13c2cab07dbfb1a33ce7c436e4571f9e78100f97ba0fef68e2766eb0a59987c4
-updated: 2018-07-09T16:49:14.855099179+07:00
+hash: 6cd185aa3a0441a16d22726cae21ffab832e25fa8819bf9965f8811fdbd62483
+updated: 2018-07-13T22:10:31.774058155+07:00
 imports:
 - name: github.com/codegangsta/cli
   version: cfb38830724cc34fedffe9a2a29fb54fa9169cd1
+- name: github.com/dustin/go-humanize
+  version: 9f541cc9db5d55bce703bd99987c9d5cb8eea45e
 - name: github.com/go-sql-driver/mysql
   version: d523deb1b23d913de5bdada721a6071e71283618
 - name: github.com/joho/godotenv
@@ -17,6 +19,8 @@ imports:
   version: 25ecb14adfc7543176f7d85291ec7dba82c6f7e4
 - name: github.com/sevlyar/go-daemon
   version: 97491df6ec974d292cb82c61906a1a4c6f29958b
+- name: github.com/struCoder/pidusage
+  version: 5e29cda97c066390d35b2eb889048fbc25381b2f
 - name: google.golang.org/appengine
   version: 9d8544a6b2c7df9cff240fcf92d7b2f59bc13416
   subpackages:

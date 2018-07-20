@@ -6,5 +6,6 @@ const (
 	LOG_INFO        = "[INFO]"
 	LOG_ERROR       = "[ERROR]"
 	LOG_CRITICAL    = "[CRITICAL]"
+	LOG_WARNING     = "[WARNING]"
 	LOG_DEBUG       = "[DEBUG]"
 )
