@@ -8,6 +8,6 @@ import (
 
 func Stop(c *cli.Context) {
 	fmt.Println("Stop")
-	m := util.NewMaster()
-	m.Stop()
+	s := util.NewServer()
+	s.Stop()
 }

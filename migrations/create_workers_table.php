@@ -15,15 +15,18 @@ class Workers extends Migration
     {
         Schema::create('workers', function (Blueprint $table) {
             $table->increments('id');
-            $table->enum('status', ['running', 'stopping'])->default('stopping');
+            $table->string('name')->unique();
+            $table->enum('status', ['started', 'running', 'stopped', 'asked_to_stop'])->default('started');
+            $table->float('usage_cpu')->unsigned()->default(0);
+            $table->float('usage_memory')->unsigned()->default(0);
             $table->string('queue')->default('default');
             $table->boolean('once')->default(false);
-            $table->integer('delay')->default(0);
+            $table->unsignedInteger('delay')->default(0);
             $table->boolean('force')->default(false);
-            $table->integer('memory')->default(128);
-            $table->integer('sleep')->default(3);
-            $table->integer('timeout')->default(60);
-            $table->integer('tries')->default(0);
+            $table->unsignedInteger('memory')->default(128);
+            $table->unsignedInteger('sleep')->default(3);
+            $table->unsignedInteger('timeout')->default(60);
+            $table->unsignedInteger('tries')->default(0);
             $table->timestamp('started_at')->nullable();
             $table->timestamps();
             $table->softDeletes();

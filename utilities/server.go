@@ -11,18 +11,18 @@ import (
 	"syscall"
 )
 
-type Master struct {
+type Server struct {
 	ctx     *daemon.Context
 	wSignal os.Signal
 }
 
-func NewMaster() *Master {
-	m := &Master{}
-	m.GetCtx()
-	return m
+func NewServer() *Server {
+	s := &Server{}
+	s.GetCtx()
+	return s
 }
 
-func (m *Master) GetCtx() *daemon.Context {
+func (s *Server) GetCtx() *daemon.Context {
 	ctx := &daemon.Context{
 		PidFileName: path.Join(filepath.Dir(cf.CONTEXT_PID_PATH), cf.CONTEXT_PID_MAIN_FILENAME),
 		PidFilePerm: 0644,
@@ -31,13 +31,13 @@ func (m *Master) GetCtx() *daemon.Context {
 		WorkDir:     "./",
 		Umask:       027,
 	}
-	m.ctx = ctx
+	s.ctx = ctx
 	return ctx
 }
 
-func (m *Master) IsRunning() (bool, *os.Process, error) {
+func (s *Server) IsRunning() (bool, *os.Process, error) {
 	running := true
-	d, err := m.ctx.Search()
+	d, err := s.ctx.Search()
 	if err != nil {
 		running = false
 	} else if err := d.Signal(syscall.Signal(0)); err != nil {
@@ -46,7 +46,7 @@ func (m *Master) IsRunning() (bool, *os.Process, error) {
 	return running, d, err
 }
 
-func (m *Master) Kill(pid int, signal os.Signal) error {
+func (s *Server) Kill(pid int, signal os.Signal) error {
 	p, err := os.FindProcess(pid)
 	if err != nil {
 		return err
@@ -56,7 +56,7 @@ func (m *Master) Kill(pid int, signal os.Signal) error {
 	return p.Signal(signal)
 }
 
-func (m *Master) WaitChildSignal(wg *sync.WaitGroup) {
+func (s *Server) WaitChildSignal(wg *sync.WaitGroup) {
 	// Set up channel on which to send signal notifications.
 	// We must use a buffered channel or risk missing the signal
 	// if we're not ready to receive when the signal is sent.
@@ -65,20 +65,20 @@ func (m *Master) WaitChildSignal(wg *sync.WaitGroup) {
 	signal.Notify(c, syscall.SIGUSR1, syscall.SIGUSR2)
 	wg.Add(1)
 	go func() {
-		m.wSignal = <-c
+		s.wSignal = <-c
 		defer wg.Done()
 	}()
 }
 
-func (m *Master) Start() {
+func (s *Server) Start() {
 	var wg sync.WaitGroup
-	m.WaitChildSignal(&wg)
-	if r, _, _ := m.IsRunning(); r {
+	s.WaitChildSignal(&wg)
+	if r, _, _ := s.IsRunning(); r {
 		Log(cf.LOG_INFO, "Gomworker is already running.")
 		return
 	}
 
-	d, err := m.ctx.Reborn()
+	d, err := s.ctx.Reborn()
 	if err != nil {
 		Logf(cf.LOG_ERROR, "Unable to start Gomworker: %v", err)
 	}
@@ -88,23 +88,24 @@ func (m *Master) Start() {
 	if d != nil {
 		Logf(cf.LOG_INFO, "Parent's process ID: %v", pid)
 		wg.Wait()
-		if m.wSignal == syscall.SIGUSR1 {
+		if s.wSignal == syscall.SIGUSR1 {
 			Log(cf.LOG_INFO, "Gomworker successfully started.")
 			return
 		}
 	} else {
 		Log(cf.LOG_INFO, "Runs its own copy on child's process.")
 		Logf(cf.LOG_INFO, "Child's process ID: %v", pid)
-		m.Kill(os.Getpid(), syscall.SIGUSR1)
+		// We must to send signal to self process because s.WaitChildSignal(&wg) is declared before
+		s.Kill(pid, syscall.SIGUSR1)
 		wg.Wait()
-		defer m.ctx.Release()
+		defer s.ctx.Release()
 	}
 
 	Log(cf.LOG_INFO, "Gomworker starting up ...")
 	// TO BE DEFINED
 
 	// Send signal to parent's process to kill goroutine
-	m.Kill(os.Getppid(), syscall.SIGUSR1)
+	s.Kill(os.Getppid(), syscall.SIGUSR1)
 
 	// Listen signals sent to child's process to kill daemon
 	c := make(chan os.Signal, 1)
@@ -118,14 +119,14 @@ func (m *Master) Start() {
 	os.Exit(0)
 }
 
-func (m *Master) Stop() {
+func (s *Server) Stop() {
 	Log(cf.LOG_INFO, "Gomworker stopping ...")
-	if r, d, _ := m.IsRunning(); r {
+	if r, d, _ := s.IsRunning(); r {
 		if err := d.Signal(syscall.Signal(syscall.SIGQUIT)); err != nil {
 			Logf(cf.LOG_ERROR, "Gomworker failed to stop daemon: %v", err)
 		}
 	} else {
-		m.ctx.Release()
+		s.ctx.Release()
 		Log(cf.LOG_ERROR, "Gomworker is not running to stop.")
 	}
 	Log(cf.LOG_INFO, "Gomworker daemon is terminated.")

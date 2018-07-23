@@ -9,6 +9,6 @@ import (
 func Start(c *cli.Context) {
 	fmt.Println("Start")
 	util.RemoveFiles(".logs/*.log")
-	m := util.NewMaster()
-	m.Start()
+	s := util.NewServer()
+	s.Start()
 }
